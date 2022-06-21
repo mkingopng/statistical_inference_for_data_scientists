@@ -4,7 +4,8 @@ output: html_notebook
 ---
 # What is R?
 R is a general purpose programming language, like many other general purpose programming languages such as Python, C,
-PHP, Javascript, and so on. It is particularly well-suited to data manipulation and statistical analysis, because it was originally designed by statisticians with these things in mind. It has thus become very popular among data analysts
+PHP, Javascript, and so on. It is particularly well-suited to data manipulation and statistical analysis, because it was
+originally designed by statisticians with these things in mind. It has thus become very popular among data analysts
 and statisticians.
 
 R was created by Ross Ihaka and Robert Gentleman at the University of Auckland. It is an implementation of the S
@@ -16,7 +17,8 @@ important differences between R and S, but much of the code written for S runs u
 
 # Why use R?
 R’s syntax makes it easy to create complex statistical models with just a few lines of code. Also, it has a large
-ecosystem of packages and other resources. Most notably for data science is the tidyverse, a group of packages built specifically to make working with data in R quicker and easier. And, there is a strong community of R users, so it's
+ecosystem of packages and other resources. Most notably for data science is the tidyverse, a group of packages built
+specifically to make working with data in R quicker and easier. And, there is a strong community of R users, so it's
 easy to find answers to question and to get guidance.
 
 Many companies, banks, financial institutions, universities and research labs have data scientists using R, doing such
@@ -593,7 +595,7 @@ search()
 Once a package is installed you can use its functionality. If you just need to use one of its items occasionally you can call it using the notation packagename::itemname. Suppose you have the package babynames installed. Then you can open its births dataset as follows:
 
 ```{r}
-# babynames::births
+babynames::births
 ```
 
 For more extensive use you will probably want to load the package. Then you don't need to keep using the package:: prefix.

@@ -1,0 +1,27 @@
+{
+    "id": "07E290E5",
+    "path": "~/Documents/GitHub/inferential_statistics/common_continuous_distributions.R",
+    "project_path": "common_continuous_distributions.R",
+    "type": "r_source",
+    "hash": "2921989450",
+    "contents": "",
+    "dirty": false,
+    "created": 1648516924523.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "19,128",
+        "scrollLine": "1"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1648517017,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1648517017215,
+    "read_only": false,
+    "read_only_alternatives": []
+}

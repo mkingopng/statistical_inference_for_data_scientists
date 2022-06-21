@@ -1,0 +1,27 @@
+{
+    "id": "163C6D56",
+    "path": "~/Documents/GitHub/inferential_statistics/visualise_pmf.R",
+    "project_path": "visualise_pmf.R",
+    "type": "r_source",
+    "hash": "4226873693",
+    "contents": "",
+    "dirty": false,
+    "created": 1648517257991.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "7,49",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1648517313,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1648517313846,
+    "read_only": false,
+    "read_only_alternatives": []
+}
