@@ -1,0 +1,1 @@
+sum(1:5, NA, na.rm=TRUE)

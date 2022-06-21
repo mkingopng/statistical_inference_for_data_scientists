@@ -1,0 +1,279 @@
+---
+title: "Random Variables and Univariate Distributions"
+output: html_notebook
+---
+
+# Random Variables example
+
+```{r}
+library(ggplot2)
+
+headstails <- data.frame(s=c("HHH","HHT","HTH","THH","TTH","THT","HTT","TTT"),
+                         X=c(3,2,2,2,1,1,1,0))
+
+ggplot(data = headstails, aes(x = X, y = ..density..)) +
+  geom_histogram(bins=4,  fill="royalblue", col="grey") +
+  scale_y_continuous(breaks = seq(0, 1, by = 0.05))
+```
+
+visualise the probability mass function for the parameter $p=0.6$
+```{r}
+library(ggplot2)
+
+x <- 1:8
+p <- 0.6
+P <- (1-p)^(x-1)*p
+dat <- data.frame(x,P)
+ggplot(data=dat, aes(x=x, y=P)) +
+  geom_bar(stat="identity", width=0.1,fill="orange2") +
+  scale_x_continuous(breaks = seq(0, 10, by = 1))
+```
+
+on average there are 5 customers that walk into the store every minute
+
+$\lambda = 5$
+
+# Question 1
+find the probability that 10 customers come into the store the next minute (3dp)
+
+$x = 10$
+
+**Hint**: try the function ```dpois(x, lambda)``` which calculates $P(X = x)$ when $X \sim \text{Poisson}(\lambda)$
+
+```{r}
+# Using exact probability
+dpois(x=10, lambda=5)
+```
+
+# Question 2:
+Find the probability that at least 5 customers come into the store in the next minute (3dp)
+
+**Hint**: Try the function ```ppois(x, lambda)``` which calculates $P(X \leq x)$ when $X \sim \text{Poisson}(\lambda)$
+
+```{r}
+1 - ppois(q=4,lambda=5)
+```
+
+# Binomial Distribution
+
+Suppose there are 10 multiple choice questions in a math quiz, where each question has four possible answer and only one of them is correct
+
+**Hint**: find the value of p first
+
+## Question 1:
+find the probability of having exactly 5 correct answers (3dp)
+
+**Hint**: try the function ```dbinom(x,n,p)```
+
+because one out of four options is correct, p=0.25
+
+```{r}
+dbinom(x=5, size=10, prob=0.25)
+```
+
+# the cumulative distribution function (cdf)
+
+```{r}
+library(ggplot2)
+
+headstails <- data.frame(s=c("HHH","HHT","HTH","THH","TTH","THT","HTT","TTT"),
+                         X=c(3,2,2,2,1,1,1,0))
+P <- ecdf(headstails$X)
+
+P(0)
+#[1] 0.125
+P(1)
+#[1] 0.5
+P(2)
+#[1] 0.875
+P(3)
+#[1] 1
+
+ggplot(headstails , aes(x=X)) + stat_ecdf(geom = "step", colour='royalblue')
+
+```
+
+# cumulative distribution function example
+
+```{r}
+# sample size
+n <- 1000
+
+# random geometric data
+x.geom <- rgeom(n=n, prob=.3)
+
+# Cumulative Distribution Function
+plot(ecdf(x.geom),
+     xlab = "x",
+     ylab = "P(X <= x)",
+     col = "royalblue",
+     cex = 0.3,
+     lwd = 0.2,
+     pch = 21,
+     main = "Cumulative Distribution Function \n Geometric(n=1000, p=0.3)")
+```
+
+
+# student t distribution
+
+```{r}
+library(ggplot2)
+x <- seq(-7, 7, by = 1/8)		# Range of x
+y1 <- dt(x, df = 2)				# t distribution for 2 degrees of freedom
+y2 <- dt(x, df = 4)				# t distribution for 4 degrees of freedom
+y3 <- dt(x, df = 8)				# t distribution for 8 degrees of freedom
+y4 <- dt(x, df = 16)			# t distribution for 16 degrees of freedom
+y5 <- dt(x, df = 32)			# t distribution for 32 degrees of freedom
+plot(x, y1,type="l",xlab="X",ylab="t distribution", ylim=range(seq(0,0.4,by=0.1)),col="blue")
+lines(x, y2,type="l", col="red")
+lines(x, y3,type="l", col="cyan")
+lines(x, y4,type="l", col="green")
+lines(x, y5,type="l", col="yellow")
+legend("topright", legend=c("v=2","v=4", "v=8", "v=16", "v=32"),
+       col=c("blue","red", "cyan", "green", "yellow"), lty=1)
+```
+
+
+# chi squared distribution
+
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+
+data.frame(chisq = seq(0, 25, by=0.01)) %>%
+  mutate(df_2 = dchisq(x = chisq, df = 2),
+         df_4 = dchisq(x = chisq, df = 4),
+         df_8 = dchisq(x = chisq, df = 8)) %>%
+  gather(key = "df", value = "density", -chisq) %>%
+  ggplot() +
+  geom_line(aes(x = chisq, y = density, color = df)) +
+  labs(title = "Chi-Square distribution for various Degrees of Freedom",
+       x = "x",
+       y = "pdf")
+```
+```{r}
+
+```
+
+# transformations and expectations example
+```{r}
+library(ggplot2)
+
+base <- ggplot(data.frame(x = c(0,1)), aes(x))
+myfunc <- function(x) -log(x)
+base + stat_function(fun = myfunc, colour = "blue") +
+  scale_x_continuous(breaks = seq(0, 1, by = 0.2)) +
+  ylim(0,10)
+```
+
+
+```{r}
+## Plot the density function
+pdf = function(y) 14*y*(1-y^(1/3))
+curve(pdf,0,1)
+## Show that the density function integrates to one
+integrate(pdf,0,1)
+```
+
+suppose that $X$ has a density function
+
+$$f_X(x) = 7e^{-7x},  0<x<\infty$$
+
+find the pdf of $Y = 4X + 3$ then using R plot the density function and show that the pdf integrates to one
+
+```{r}
+## Plot the density function
+pdf <- function(y) (7/4)*exp(-(7/4)*(y-3))
+curve(pdf,3,10)
+## Show that the density function integrates to one
+integrate(pdf,3,Inf)
+```
+
+# plotting probability density function question 2
+for the following $Y=X^2$ where $X$ has the density:
+
+$$f_X(x) = 30x^2(1-x)^2,   0<x<1$$
+
+- find the pdf of $Y$
+- plot the pdf of $Y$ in R
+- show that the pdf integrates to one in R
+
+```{r}
+## Plot the density function
+pdf <- function(y) 15*sqrt(y)*(1-sqrt(y))^2
+curve(pdf,0,1)
+## Show that the density function integrates to one
+integrate(pdf,0,1)
+```
+
+# answer:
+The density of $Y$ is
+
+$$f_Y(y)=15(1- \sqrt{y})^2 \sqrt{y}$$
+$$S_Y = [0,1]$$
+
+
+# the exponential density
+
+```{r}
+data <- -log(1-runif(10000))
+hist(data, prob = TRUE, breaks = 100)
+curve(exp(-x), add = TRUE, col = "purple", lwd = 2)
+```
+
+# R's built in distributions
+try experimenting with the random number generation using the R built-in distributions
+
+```{r}
+n <- 10000
+alpha <- 0.8
+beta <- 5
+sim.dat <- rgamma(n, alpha, beta)
+hist(sim.dat, prob = TRUE, breaks = 100)
+curve(dgamma(x,alpha,beta),add=TRUE,col="orange", lwd = 2)
+```
+
+# moments
+
+```{r}
+# install.packages("moments")
+library(moments)
+data <- c(88, 95, 92, 97, 96, 97, 94, 86, 91, 95, 97, 88, 85, 76, 68)
+```
+
+
+```{r}
+# calculate skewness
+skewness(data)
+```
+
+
+```{r}
+# calculate kurtosis
+kurtosis(data)
+```
+
+# (from the lecture)
+```{r}
+choose(2,1)
+```
+```{r}
+factorial(n)
+```
+
+
+```{r}
+choose(52,4)
+```
+
+# telegraph example 1
+```{r}
+
+```
+
+
+#
+```{r}
+sqrt(1/3)
+```

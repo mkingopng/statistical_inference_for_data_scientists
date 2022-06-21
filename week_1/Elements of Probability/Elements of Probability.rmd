@@ -1,0 +1,200 @@
+---
+title: "Elements of Probability"
+output: html_notebook
+---
+
+
+# the coin toss game
+## question 1
+the probability of drawn scores for 2 throws
+```{r}
+dbinom(x=1, size=2, prob=0.5)
+```
+
+## Question 2
+find the probability that after 10 throws our scores happen to be equal
+- size = the number of throws = 10
+- x = 5, the score (which must be equal, it is size divided by 2)
+- prob = 0.5 because there is a 50/50 chance in a fair coin toss
+```{r}
+dbinom(x=5, size=10, prob=0.5)
+```
+
+- use the ```choose(n,k)``` function to calculate the binomial coefficient
+- use the ```factorial()``` function to calculate factorials
+
+## Question 3
+(ref wk1 lecture 1 23:00)
+
+What is the probability that after 11 throws my score is 3 points higher than yours?
+- size = 11
+- x = 4, because in order to meet the condition my score must be 7 and your score 4
+```{r}
+dbinom(x=4, size=11, prob=0.5)
+```
+
+# The tennis game
+
+```{r}
+
+```
+
+# The birthday problem
+## Question 1:
+suppose there are n people gathered in a room. FInd the probability that at least 2 people have the same birthday when n people are gathered in a room
+
+- nb: look at the compliment of the event rather thant the event itself
+- need to give an algebraic answer
+
+```{r}
+k <- 100  # number of people in room
+p <- numeric(k)  # create numeric vector to store probabilities
+for (i in 1:k)      {
+  q <- 1 - (0:(i - 1))/365  # 1 - prob(no matches)
+  p[i] <- 1 - prod(q)  }
+plot(p, main="Probability at least 2 people have same Birthday", xlab ="Number of People", ylab = "Probability", col="blue")
+```
+
+## question 2
+what is the probability that all birthdays are distinct?
+
+```{r}
+
+```
+
+```{r}
+n <- 22
+1 - prod(365: (365-n+1))/365^n
+```
+
+
+## question 3
+what is the probability of 2 people having the same birthday if there are 23 people in the room?
+```{r}
+n <- 23
+1 - prod(365: (365-n+1))/365^n
+```
+
+## question 4:
+find the probability that at least one person has the same birthday as you, and find the value of n so that this probability approaches 1/2
+- complimentary event (no one has my birthday)
+```{r}
+a <- 364
+b <- 365  # the number of days in the year
+p <- 0.5  # the probability
+n <- log(p)/log(a/b)
+n  # the number of people you need to have a 50% chance of
+```
+
+# conditional probabilities: aces in a deck
+
+## Question 1
+the probability of being dealt 4 aces
+- n=52 because there are 52 cards in a deck
+- k=4 because there are 4 aces in the deck
+```{r}
+a <- choose(52, 4)
+a  # the number of distinct groups of 4 cards
+1/a  # the probability of being dealt 4 aces
+```
+
+# question 2
+four cards will again be dealt from a well-shuffled deck, and we now calculate the probability of 4 aces conditional on i aces having already been dealt
+```{r}
+1/choose(52-1, 4-1)  # i=1
+1/choose(52-2, 4-2)  # i=2
+1/choose(52-3, 4-3)  # i=3
+```
+
+
+# coded telegraph message
+When a coded telegraph message is sent, there are sometimes errors in transmission. In particular, Morse code uses ”dots” and ”dashes”, which are known to occur in the proportion of 3:4.
+- P(dot sent) = 3/7
+- P(dash sent) = 4/7
+
+```{r}
+sent <- 3/7
+received <- 7/8
+notsent <- 1-sent
+notreceived <- 1-received
+denom <- sent * received + notsent * notreceived
+(sent * received)/denom  # the probability of correctly receiving a dot
+
+```
+
+# colour blind
+Suppose that 5% of men and 0.25% of women are colour-blind. A person is chosen at random and that person is colour-blind. Find the probability that the person is male. Assume males and females to be in equal numbers.
+
+Let M and F denote the event that the randomly selected person is male or female, respectively. Let C denotes the event that the randomly selected person is colour-blind. From the question, we know the following probabilities:
+- P(C|M) = 0.05
+- P(C|F) = 0.0025
+- P(M) = P(F) = 0.5
+
+```{r}
+PCM <- 0.05  # probability that the person is male and colour blind
+PCF <- 0.0025  # probability that the person is femal and colour blind
+PMF <- 0.5  # probability for each gender
+PC <- (PCM * PMF) + (PCF * PMF)  # the probability that a person is colour blind
+(PCM*PMF)/PC  # the probability that the person is male
+```
+
+# Telegraph signal
+Consider telegraph signals ”dot” and ”dash” sent in the proportion 3 : 4, where erratic transmissions cause a dot to become a dash with probability 1/4 and a dash to become a dot with probability 1/3. If a dash is received, find the probability that a dash has been sent? (2 dp.)
+
+
+
+```{r}
+
+a <- 3/7  # P(dot sent)
+b <- 4/7  # P(dash sent)
+c <- 1/4  # P(dash rec | dot sent)
+d <- 1/3  # P(dot rec|dash sent)
+e <- 3/4  # P(dot rec|dot sent) implied
+f <- 2/3  # P(dash rec|dash sent) implied
+(f*b) / ((f*b) + (c*a))  # the probability that a dash was sent when a dash is received
+```
+
+# question
+Assuming independence between signals, if the message dot-dot was received, find the probability distribution of the four possible messages that could have been sent.
+
+1) conditional probability for dot-dot
+```{r}
+dd <- (e*a) / ((d*b)+(e*a))  # probability dot-dot sent and dot-dot received
+dd
+dd^2
+```
+
+2) conditional probability for dash-dot
+```{r}
+
+```
+
+
+3) conditional probability for dot-dash
+
+```{r}
+
+```
+
+4) conditional probability for dash-dash
+```{r}
+
+```
+
+
+# Rodent Problem
+Two litters of a particular rodent species have been born, one with two brown-haired and one grey-haired (litter 1), and the other with three brown-haired and two grey-haired (litter 2). We select a litter at random and then select an offspring at random from the selected litter. Find the probability that the animal chosen is brown-haired. (2dp.)
+
+```{r}
+l <- 1/2  # probability of litter 1 or 2
+b <- 2/3  # probability of brown hair in litter 1
+c <- 3/5  # probability of brown hair in litter 2
+x <- (b*l) + (c*l)  # the probability that the randomly chosen animal is brown haired
+x
+```
+
+Given that a brown-haired offspring was selected, find the probability that the sampling was from litter 1. (2dp.)
+```{r}
+(b*l)/x  # the probability that the animal was from litter 1
+```
+

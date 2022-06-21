@@ -1,0 +1,6 @@
+cos(pi/4)
+sin(pi/4)
+tan(pi/4)
+acos(pi/4)
+asin(pi/4)
+atan(pi/4)

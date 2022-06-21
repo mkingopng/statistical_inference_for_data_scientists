@@ -1,0 +1,16 @@
+---
+title: "Doing statistics with R"
+output: html_notebook
+---
+
+
+```{r}
+```
+
+
+```{r}
+mycars <- within(mtcars, { cyl <- ordered(cyl) })
+mycars
+```
+
+

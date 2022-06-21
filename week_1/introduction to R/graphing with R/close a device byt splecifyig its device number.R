@@ -1,0 +1,10 @@
+pdf()
+pdf()
+svg()
+svg()
+pdf()
+pdf()
+dev.list()
+# Close device number 4
+dev.off(4)
+dev.list()

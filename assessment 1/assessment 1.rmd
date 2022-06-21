@@ -1,0 +1,137 @@
+---
+title: "Assessment 1 (10%)"
+output: html_notebook
+---
+Due: 12pm midday Monday week 2
+
+### Question 1:
+suppose that three unbiased dice are rolled. Find the probability that at least two of the three dice have a face value
+of 5 of more. Give your answer to 2 decimal places. we need to add the probability that x=2 and the probability that x=3
+
+```{r}
+# dbinom(x=2,size=3, prob=1/3) + dbinom(x=3,size=3, prob=1/3)
+```
+
+### Question 2:
+suppose that $F$ denotes that a randomly selected individual is female and $B$ denotes that a randomly selected
+individual has blonde hair. It is known that $P(F) = 0.57, P(B)=0.21$ and $P(F \cup B)=0.60$. Find the conditional
+probability that an individual is female given that we know they have blonde hair. Give your answer to two decimal
+places.
+
+```{r}
+F <- 0.57
+M <- 0.43
+B <- 0.21
+NB <- 0.79
+ForB <- 0.6  # not entirely sure of the relevance of this
+
+FandB <- F + B - ForB  # P(female) plus P(blonde), less the intersection
+# FandB  # female and blonde
+FandB / B  # the probability that the person is female given they are blonde
+```
+
+### Question 3:
+Let $X$ be a continuous random variable with density
+
+$$f_X (x) = \dfrac{x}{2}$$
+
+for $0 < x < c$. Find the value of the constant $c$ that makes $f_X(x)$ a valid probability density function. Enter the
+exact value.
+
+*this looks like it relates to the probability density function theorem example*
+two conditions
+
+```{r}
+# Plot the density function
+pdf <- function(x) x/2
+# Show that the density function integrates to one
+integrate(pdf,0,2)
+```
+
+### Question 4: (true/false)
+Suppose there are two events $A$ and $B$ such that $P(A^c)=0.2$ and $P(B)=0.3$. The two events $A$ and $B$ can be disjoint.
+
+```{r}
+
+```
+
+### Question 5: (multi choice)
+Let $X$ has a probability density function
+
+$$f(x)= \theta e^{-\theta x}$$
+
+for $0 < x < \infty$ and $\theta > 0$ a positive constant. Find the probability density function of
+
+$$Y = \sqrt{X}$$
+
+The domain must also be specified in you answer.
+
+*pdf*
+
+```{r}
+
+```
+
+### Question 6: (multichoice)
+Let the continuous random vector $(X,Y)$ have joint density
+
+$$f(x,y)=e^{-x}, 0<y<x<\infty$$
+
+Find the conditional density of $X$ conditioned on $Y=y$
+
+```{r}
+
+```
+
+### Question 7:
+For the following density function of $X$
+
+$$f(x) = \begin{Bmatrix}
+2(x-1) & \text{if} & 1 < x < 2, \\
+0 & & \text{zero elsewhere}
+\end{Bmatrix}$$
+
+*this looks like the geometric distribution probability mass function*
+
+compute $P(X>1.3)$. your answer should be to two decimal places.
+```{r}
+
+```
+
+### Question 8:
+Let the number of insurance claims in a particular hour for an insurance company have a poisson distribution with probability mass function
+$$f(x, \lambda) = \dfrac{e^{-\lambda}\lambda^x}{x!}, for x \in 0,1,2,..., \lambda >0$$
+You are asked to **find the smallest value of the mean (which equals $\lambda$) of this distribution that ensures the probability that a randomly chosen hour has zero insurance claims to be smaller than 0.20**. Your answer should be to two decimal places.
+*poisson pmf*
+
+# (this isn't correct)
+
+```{r}
+ppois(0, 1.61)
+```
+
+### Question 9:
+Let $T$ have probability density function
+$$f_T (t) = \dfrac{nt^{nt^{n-1}}}{\theta^n}$$
+for $0<t< \theta$ where $\theta > 0$ and $n$ is a known integer. Compute the mean of T.
+*mean is the square root of variance*
+# problem
+```{r}
+x <- n*t^(n-1)/a^x
+moment(x, order=1, center=FALSE, absolute=FALSE, na.rm=FALSE)
+```
+
+### Question 10: (multichoice)
+
+Let $T$ have probability density function
+
+$$f_T (t) = \dfrac{nt^{n-1}}{\theta^n}$$
+
+for $0 < t < \theta$ where $\theta > 0$ and $n$ is a known integer. Compute the variance of $T$
+
+**Hint**: It is known that for any random variable $X$ we have $\text{Var}(X) = E(X^2) - (E(X))^2$
+
+
+```{r}
+
+```

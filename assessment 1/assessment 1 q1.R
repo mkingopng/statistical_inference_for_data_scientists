@@ -1,0 +1,1 @@
+dbinom(x=2,size=3, prob=1/3) + dbinom(x=3,size=3, prob=1/3)
