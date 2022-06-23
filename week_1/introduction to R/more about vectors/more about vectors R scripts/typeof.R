@@ -1,8 +1,0 @@
-is.integer(2L)
-is.integer(3.14)
-is.double(2L)
-is.double(3.14)
-is.character("mouse")
-is.character(3.14)
-is.logical(FALSE)
-is.logical(3.14)

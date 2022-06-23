@@ -1,0 +1,5 @@
+x <- c(TRUE, TRUE, FALSE, FALSE)
+y <- c(TRUE, FALSE, TRUE, FALSE)
+xor(x, y)
+(x | y) & !(x & y)
+(x & !y) | (!x & y)

@@ -1,1 +1,0 @@
-boxplot(iris$Sepal.Width)

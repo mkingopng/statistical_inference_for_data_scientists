@@ -1,0 +1,374 @@
+---
+title: "Elements of Probability"
+output: html_notebook
+---
+# the coin toss game
+
+## q1
+find the probability that after 10 throws our scores are equal
+
+- size = the number of throws = 10
+- x = 5, the score (which must be equal, it is size divided by 2)
+- prob = 0.5 because there is a 50/50 chance in a fair coin toss
+```{r}
+dbinom(x=5, size=10, prob=0.5)
+```
+
+## q2
+find the probability that after 11 throws my score is three points higher than yours
+
+- size = the number of throws = 11
+- x = 7, if my score is 3 higher than yours, and the total is 11, then my score must be 7
+- prob = 0.5 because there is a 50/50 chance in a fair coin toss
+```{r}
+dbinom(x=7, size=11, prob=0.5)
+```
+
+- use the ```choose(n,k)``` function to calculate the binomial coefficient
+- ref tutorial 1 @ 15:16
+```{r}
+choose()
+```
+
+- use the ```factorial()``` function to calculate factorials
+```{r}
+factorial()
+```
+# The Tennis Game
+
+## q1 suppose there are 8 players, find the probability that they meet in the first or second round (2dp)
+8 players
+3 rounds
+probability 0.5
+```{r}
+dbinom(x=3, size=8, prob=0.5)
+```
+# The birthday problem
+there is supposed to be a version for an undefined n which i can't get working
+
+## q1
+suppose that there are n people gathered in a room. find the probability that at least two people have the same birthday when n people are gathered in a room.
+```{r}
+
+```
+## Question 1: ref slide 17
+suppose there are n people gathered in a room. FInd the probability that at least 2 people have the same birthday when n people are gathered in a room
+- nb: look at the compliment of the event rather thant the event itself
+- need to give an algebraic answer
+```{r}
+k <- 100  # number of people in room
+p <- numeric(k)  # create numeric vector to store probabilities
+for (i in 1:k)      {
+  q <- 1 - (0:(i - 1))/365  # 1 - prob(no matches)
+  p[i] <- 1 - prod(q)  }
+plot(p, main="Probability at least 2 people have same Birthday", xlab ="Number of People", ylab = "Probability", col="blue")
+```
+## q2
+calculate the probability that at least two people have the same birthday for n = 22 (2dp)
+```{r}
+n <- 22
+1 - prod(365: (365-n+1)) / 365^n
+```
+## q3
+calculate the probability that at least two people have the same birthday for n=23
+```{r}
+n <- 23
+1 - prod(365:(365-n+1)) / 365^n
+```
+# q 4
+find the probability that at least one person has the same birthday as you and find the value of n so that this probability approaches 1/2
+```{r}
+a <- 364  # the number of outcomes not in the event. the compliment.
+b <- 365  # the number of days in the year
+p <- 0.5  # the probability
+n <- log(p)/log(a/b)
+n  # the number of people you need to have a 50% chance that at least one person has the same name as you
+```
+
+# cards example
+## question 1
+four cards are deal from the top of a well shuffled deck of 52 playing cards. FInd the probability that they are 4 aces.
+
+```{r}
+groups <- choose(52, 4)
+groups
+1 / groups
+```
+## Question 2
+four cards will again be dealt from a well-shuffled deck, and we now calculate the probability of 4 aces conditional on i aces having already been dealt
+
+ref slide 25
+```{r}
+1/choose(52-1, 4-1)  # i = 1
+1/choose(52-2, 4-2)  # i = 2
+1/choose(52-3, 4-3)  # i = 3
+```
+# Coded Telegraph Message
+When a coded telegraph message is sent, there are sometimes errors in transmission. In particular, Morse code uses ”dots” and ”dashes”, which are known to occur in the proportion of 3:4.
+- P(dot sent) = 3/7
+- P(dash sent) = 4/7
+
+```{r}
+sent <- 3/7
+received <- 7/8
+notsent <- 1-sent
+notreceived <- 1-received
+denom <- sent * received + notsent * notreceived
+denom  # probability dot received
+(sent * received)/denom  # the probability of correctly receiving a dot
+
+```
+# Colour Blind
+## q1
+Suppose that 5% of men and 0.25% of women are colour-blind. A person is chosen at random and that person is colour-blind. Find the probability that the person is male. Assume males and females to be in equal numbers.
+
+Let M and F denote the event that the randomly selected person is male or female, respectively. Let C denotes the event that the randomly selected person is colour-blind. From the question, we know the following probabilities:
+- P(C|M) = 0.05
+- P(C|F) = 0.0025
+- P(M) = P(F) = 0.5
+```{r}
+PCM <- 0.05  # probability that the person is male and colour blind
+PCF <- 0.0025  # probability that the person is femal and colour blind
+PMF <- 0.5  # probability for each gender
+PC <- (PCM * PMF) + (PCF * PMF)  # the probability that a person is colour blind
+PC  # probability that the person is colour-blind
+(PCM*PMF)/PC  # the probability that the person is male
+```
+# Telegraph signal
+## q1
+Consider telegraph signals ”dot” and ”dash” sent in the proportion 3 : 4, where erratic transmissions cause a dot to become a dash with probability 1/4 and a dash to become a dot with probability 1/3. If a dash is received, find the probability that a dash has been sent? (2 dp.)
+
+```{r}
+a <- 3/7  # P(dot sent)
+b <- 4/7  # P(dash sent)
+c <- 1/4  # P(dash rec | dot sent)
+d <- 1/3  # P(dot rec|dash sent)
+e <- 3/4  # P(dot rec|dot sent) implied
+f <- 2/3  # P(dash rec|dash sent) implied
+(f*b) / ((f*b) + (c*a))  # the probability that a dash was sent when a dash is received
+```
+## q2
+Assuming independence between signals, if the message dot-dot was received, find the probability distribution of the four possible messages that could have been sent.
+
+conditional probability for dot-dot
+```{r}
+dd <- (e*a) / ((d*b)+(e*a))  # probability dot-dot sent and dot-dot received
+dd
+dd^2  # because of independence
+```
+# Rodents
+## q1
+two litters of a particular rodent species have been born, one with two brown-haired  and one grey-haired (litter 1), and the other with three brown haired and two grey-haired (litter 2). We select a litter at random and then select an ofspring at random from the selected litter. Find the probability that the animal chosen is brown-haired. (2dp.)
+
+*ref slide 35*
+```{r}
+litter <- 1/2  # probability of litter 1 or 2
+p1 <- 2/3  # probability of brown hair in litter 1
+p2 <- 3/5  # probability of brown hair in litter 2
+pbh <- (p1*litter) + (p2*litter)  # the probability that the randomly chosen animal is brown haired
+pbh  # probability that the randomly chosen animal is brown haired
+```
+## q2
+given that a brown-haired offspring was selected, find the probability that the sampling was from litter 1 (2dp)
+```{r}
+litter <- 1/2  # probability of litter 1 or 2
+p1 <- 2/3  # probability of brown hair in litter 1
+(p1*litter)/pbh  # the probability that the animal was from litter 1
+```
+# distributions
+# geometric distribution
+```{r}
+rgeom(5, 0.5)
+```
+# poisson distribution
+## q1
+If there are twelve cars crossing a bridge per minute on average, find the probability of having seventeen or more cars crossing the bridge in a particular minute.
+
+Let X be the number of accidents at a busy Sydney intersection in a month. The average number of accidents per month is three. Calculate the probability that zero accidents occur in a particular month.
+
+q = the number of incidents we want to test for
+lambda = the average number of accidents per month
+
+we use ppois because...
+```{r}
+ppois(0, lambda=3)
+```
+# store traffic
+## q1
+Suppose that on average 5 customers walk into a store every minute. Find the probability that 10 customers come into the store the next minute (3dp)
+
+q = 10
+lambda = 5
+```{r}
+dpois(10, lambda=5)
+```
+## q2
+find the probability that at least five customers come into the store the next minute (3dp)
+q = 5
+lambda = 5
+we use dpois because...
+```{r}
+dpois(5, lambda=5)
+```
+# The Bernoulli Distribution
+Suppose that X is the outcome of flipping a coin where a head is given the outcome one and a tail is given the outcome 0. COmpute the rpobability that a head is flipped and also that a tail is flipped
+
+```{r}
+
+```
+# the binomial distribution
+
+## q1
+suppose that X is Binomially distributed with n=5 trials and probability of success p = 0.8. Compute the probability that there are four successful trials, ie: P(X=4)
+
+ref slide 48
+```{r}
+dbinom(4, size = 5, prob=0.8)
+```
+## q2
+suppose there are 10 multiple choice questions in a maths quiz, where each question has four possible answers and only one of them is correct. Hint, the value of p first.
+
+probability = 0.25
+size = 10
+x = 5
+
+ref slide 49
+```{r}
+dbinom(x=5, size = 10, prob=0.25)
+```
+
+# Cumulative Distribution Function
+
+## q1 if the CDF of a distribution is
+
+# the probability density function theorem
+
+## question
+
+
+# Common Continuous Distributions
+
+
+# Transformations
+
+
+# Density Transformation Formula
+
+
+# Density Transformation example
+example from slide 73
+
+```{r}
+## Plot the density functions
+pdf <- function(y) 14*y*(1-y^(1/3))
+curve(pdf,0,1)
+```
+
+show that the density function integrates to one
+```{r}
+integral <- integrate(pdf,0,1)
+integral
+```
+
+
+## Example 2
+suppose that X has the density function $f_X (x) = 7e^{-7x}  $0 < x < \infty$
+```{r}
+# Plot the density function
+pdf <- function(y) (7/4)*exp(-(7/4)*(y-3))
+curve(pdf,3,10)
+```
+Show that the density function integrates to 1
+```{r}
+integrate(pdf,3,Inf)
+```
+## q2
+For the following $Y=X^2$ where $X$ has the density:
+$f_X (x) = 30x^2(1-x)^2$,   $0 < x < 1$
+- find the pdf of Y
+- plot the pdf of Y in R
+- Show that the pdf integrates to one in R
+```{r}
+pdf <- function(y) 15*sqrt(y)*(1 - sqrt(y))^2
+curve(pdf,0,1)
+```
+show that the density function integrates to one
+```{r}
+integrate(pdf,0,1)
+```
+
+# Probability Integral Transform
+ref slide 80
+```{r}
+data <- -log(1-runif(10000))
+hist(data, prob = TRUE, breaks = 100)
+curve(exp(-x), add = TRUE, col = "purple", lwd=2)
+```
+
+# R's built-in distributions
+R provides built in random number generators for well known distributions. For example, if you wish to generate observations from the Gamma(a,b) distribution, you can do the following:
+
+```{r}
+n = 10000
+alpha = 0.8
+beta = 5
+sim.dat = rgamma(n, alpha, beta)
+hist(sim.dat, prob = TRUE, breaks = 100)
+curve(dgamma(x,alpha,beta),add=TRUE,col="orange", lwd = 2)
+```
+
+# expected Values
+Suppose X has an exponential λ distribution, with density
+
+$f_X(x) =\dfrac{1}{\lambda}e^{-x/\lambda}, $0 \leq x < \infty, \lambda > 0$.
+
+Find the expected value of X.
+
+```{r}
+pdf <- function(x) 1/l * e^(-x/l)
+E <- integrate(pdf, lower = 0, upper = Inf)
+E
+```
+# q
+Apple is planning to host a live webcast of the next wwdc conference. The server has a maximum capacity of 3 million people (measured in millions) that want to watch the live webcast, with pdfs
+
+$f(x) = \dfrac{x^2}{9}$ for $0 < x < 3$
+
+this one is problematic
+```{r}
+pdf <- function(x) (x^2)/9
+mean(pdf)
+```
+
+## q
+find the variance of the number of people who want to watch the webcast. Give your answer to 4 decimal places
+
+```{r}
+
+```
+
+# q
+show that if a pdf is symmetric about a point a, the $\alpha_3 = 0$. Hint: Show that $\mu_3 = 0$ for a general density function $f(x)$. note that $\mu = a$
+
+```{r}
+
+```
+
+# q
+calculate $\alpha_4$ for the following:
+
+$f(x) = \dfrac{}{}, -1 < x < 1$
+
+- first calculate the mean (the first momement)
+- second calculate the variance (the second moment)
+- the calculate the third and fourth central moments
+- skewness is $\alpha_2$
+- kurtosis is $\alpha_4$
+
+```{r}
+
+```
+
+
+# Covariance and correlation
+will be discussed in the next unit on multivariate distributions

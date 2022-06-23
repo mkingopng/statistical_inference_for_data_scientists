@@ -1,0 +1,1 @@
+plot(iris$Species) # iris#Species is a factor

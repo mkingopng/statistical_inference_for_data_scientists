@@ -1,1 +1,0 @@
-hist(iris$Sepal.Width, breaks=20)

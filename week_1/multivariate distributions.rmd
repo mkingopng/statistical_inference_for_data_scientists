@@ -1,0 +1,101 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# joint cumulative distribution function
+
+# joint probability mass function
+
+# Joint Density Function
+
+## q1
+a pdf is defined by:
+
+Find the value of C
+
+
+```{r}
+```
+## q2
+find the joint cdf of X and Y
+
+```{r}
+
+```
+## q3
+compute the probability #P(X \leq 1, Y \leq 0.25) to 2 decimal places
+
+```{r}
+
+```
+## q4
+Let X and Y be independent random variables with the same geometric distribution (same parameter p) for p=0.5, the pmf looks like the following:
+```{r}
+
+```
+# q5 what is the joint pmf of (X,Y)? Hint, the joint pmf of independent random variables is given by
+$P(X=x, Y=y) = P(X=x)P(Y=y)$
+
+
+```{r}
+
+```
+
+# marginal distributions
+## q1
+consider the pdf:
+
+Find the marginal distribution of X
+```{r}
+
+```
+# Conditional Distribution
+
+
+```{r}
+
+```
+# Moments and transformations
+
+
+```{r}
+
+```
+# Density Transformation Formula
+
+
+```{r}
+
+```
+## q1
+let $X_1$ and $X_2$ have the following joint density function $f(x_1, x_2) = 1$ defined over the unit square $0 \leq x_1 \leq 1$. We will now consider the transformed variables $Y_1 = X_1 + X_2$ and $Y_2 = X_1 - X_2$. Find the joint pdf of $Y_1$ and $Y_2$
+
+```{r}
+
+```
+
+#
+given the pdf
+
+find the pdf of the random variable $Z = 9/(X+1)^2$
+
+- first calculate the marginal density
+- apply the density transformation formula
+
+```{r}
+pdf <- function(x,y) x+2*y
+integrate(pdf,0,2)
+```
+# q
+Let $X_1$ and $X_2$ have joint pdf
+
+$$
+
+find the joint pdf of $Y_1 = X_1^2$ and $Y_2 = X_1X_2$
+
+ref slide 125
+```{r}
+
+```
+

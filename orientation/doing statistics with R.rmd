@@ -1,0 +1,159 @@
+---
+title: "Doing statistics with R"
+output: html_notebook
+---
+# Some handy functions
+There are some general functions that are handy when doing statistics.
+
+## sums
+You can use sum to add the elements of one or more numerical vectors:
+
+```{r}
+sum(1:10)
+sum(c(1.2, 2.3, 3.4))
+sum(1:2, 3:5) # Two vectors
+```
+
+If there are missing values then the sum is unknown, so the result is NA:
+```{r}
+sum(1:5, NA)
+```
+
+You can tell the sum function to ignore missing values by adding the argument na.rm=TRUE.
+```{r}
+sum(1:5, NA, na.rm=TRUE)
+```
+
+## Differences
+You can get the lagged differences of the elements in a numeric vector using diff. For each element, starting from the second, the difference between it and the previous element is calculated. Notice that the resulting vector has one fewer elements.
+```{r}
+x <- c(2, 4, 5, 4, 6, 8) # Six elements
+diff(x) # Five elements
+```
+
+# cumulatives
+```{r}
+cumsum(c(2, 3, 1, 4, 2, 3, 4, 5, 6, 0, 4))
+```
+
+Similarly, you can get the cumulative product, cumulative maximum, and cumulative minimum:
+```{r}
+x <- c(2, 3, 1, 4, 2, 3, 4, 5, 6, 0, 4)
+cumprod(x)
+cummax(x)
+cummin(x)
+```
+
+# Factorials
+If n is an integer with n ≥\ge≥ 1 then the factorial of n is defined to be $1 \times 2 \times ... \times n$. R has a function factorial that calculates factorials:
+
+```{r}
+factorial(10)
+```
+
+Let's check this by calculating the factorial explicitly:
+```{r}
+# One way
+1 * 2 * 3 * 4 * 5 * 6 * 7 * 8 * 9 * 10
+
+# Another way
+cumprod(1:10)[10] # Get the last cumulative product
+```
+
+The factorial function is vectorised, which means that you can apply it to a vector of integers and get the factorial of each integer in the vector:
+```{r}
+factorial(1:5)
+```
+
+# Combinations
+Suppose you choose a sample of n objects from a population of N objects, without replacement. This sample is called a combination. How many such combinations are there? Answer:
+
+$\{N \choose n} = \dfrac{N!}{n!(N-n)!}$
+
+R has a function choose that calculates this number:
+
+```{r}
+choose(10, 3)
+```
+
+Let's check this, by calculating the number explicitly:
+```{r}
+factorial(10)/(factorial(3)*factorial(10 - 3))
+```
+
+If you'd like to actually generate the combinations of a given length from a vector then you can use combn:
+```{r}
+x <- c(1, 2, 3, 4, 5)
+combn(x, 3)
+```
+# Random samples
+The sample function gives you a way to generate random samples of data.
+```{r}
+# A random shuffle of the first 30 positive integers
+sample(30)
+
+# A random sample of 10 taken from the first 30 positive integers, without replacement
+sample(30, size=10)
+
+# A random sample of 10 taken from the first 30 positive integers, with replacement
+sample(30, size=10, replace=TRUE)
+```
+
+# Summarising Data
+Suppose you have some numerical values in a vector. R has a variety of functions to help you summarise the values.
+
+# Mean and Median
+You can use the functions mean and median to find the mean and median of the values:
+```{r}
+x <- sample(100, size=20, replace=TRUE)
+x
+mean(x)
+median(x)
+```
+
+If there are any NAs in the vector then the results will be NA:
+```{r}
+# With NAs
+mean(c(1:10, NA))
+median(c(1:10, NA))
+```
+
+You can tell R to ignore the NAs by adding na.rm=TRUE:
+```{r}
+# Ignore the NAs
+mean(c(1:10, NA), na.rm=TRUE)
+median(c(1:10, NA), na.rm=TRUE)
+```
+
+If you'd like to exclude outliers from the calculations then you can add a trim argument. If you add trim=0.1 then R will sort the elements and ignore the first 10% and the last 10% of them. So, if the vector has 20 elements then it will ignore the first 2 and the last 2.
+```{r}
+x <- sample(100, size=20, replace=TRUE)
+x
+mean(x, trim=0.1)
+median(x, trim=0.1)
+```
+
+In many cases the numerical vector in which you are interested is a column of a data frame:
+```{r}
+df <- read.csv('../data/wine.csv')
+# Without ignoring NAs
+mean(df$X1.04)
+median(df$X1.04)
+
+# Ignoring NAs
+mean(df$X1.04, na.rm=TRUE)
+median(df$X1.04, na.rm=TRUE)
+```
+
+# Range, variance, and standard deviation
+You can use min and max to find the minimum and maximum values of a numerical vector:
+
+
+
+
+```{r}
+mycars <- within(mtcars, { cyl <- ordered(cyl) })
+mycars
+```
+
+

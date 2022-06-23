@@ -1,0 +1,5 @@
+any(c(FALSE, FALSE))
+any(c(FALSE, TRUE))
+any(c(TRUE, TRUE))
+all(c(FALSE, TRUE))
+all(c(TRUE, TRUE))

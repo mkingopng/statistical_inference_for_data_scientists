@@ -1,5 +1,0 @@
-x <- c('a', 'b')
-y <- c('1', '2')
-paste(x, y)
-paste(x, y, sep='')
-paste(x, y, sep=':')

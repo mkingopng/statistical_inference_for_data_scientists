@@ -1,1 +1,0 @@
-curve(x^2 + 2*x -2, from=-3, to=3)

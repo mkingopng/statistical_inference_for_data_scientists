@@ -1,0 +1,547 @@
+---
+Title: "Graphing with R"
+Output: html_notebook
+---
+# Overview
+R has some powerful graphing functionality. If you end up doing a lot of graphing then you'll probably want to use the ggplot2 package, which unifies and simplifies the process. But you can achieve a lot fairly easily using base R directly. Plus, it's good to understand what's going on behind the scenes of a package like ggpolot2.
+
+## Demonstrations
+You can see some demonstrations of graphing with base R using the demo function:
+```{r}
+demo(graphics)
+```
+
+Or, for 3D graphing:
+
+```{r}
+demo(persp)
+```
+What you need to know
+
+There are five things you need to know about in order to understand graphing in R:
+- **Graphical devices**
+- **High level graphical functions**
+- **Options and parameters**
+- **Low level graphical functions**
+- **Multi-plotting**
+
+We'll go through each of these in the following slides.
+
+# Graphical devices
+You make graphs in R by calling graphical functions. When you call one of these functions its output gets sent to a graphical device, which is either a graphical window or a file.
+
+The graphical devices available to you include:
+- A window
+- A pdf file
+- A png file
+- An svg file
+
+To get a complete list you can use ```help(device)``` or ```?device```:
+
+```{r}
+?device
+```
+When you call a graphical function the output gets sent to the current graphical device. If there are no devices open, and thus no current device, then R opens a graphical window, makes it the current device, and sends the output there.
+
+You can open a graphical device manually:
+
+```{r}
+# Open a pdf file
+pdf()
+# Open a png file
+png()
+# Open an svg file
+svg()
+```
+
+When you open a device in this way it becomes the current device. You see which devices are open and which one is current using the dev.list and dev.cur functions. Note that each device has a number.
+
+```{r}
+pdf()
+pdf()
+svg()
+# Get a list of open devices
+dev.list()
+# Get the current device
+dev.cur()
+```
+You can change the active device to one of the other open devices using ```dev.set```, and specifying the number of the device you'd like to make current (the ```dev.list``` function tells you the number of each device). Note that ```dev.set``` returns the active device.
+
+```{r}
+pdf()
+pdf()
+svg()
+dev.list()
+# Set the current device to device number 2
+dev.set(2)
+```
+You can close the active device using ```dev.off```. R makes the first device the active device and reports this.
+
+```{r}
+pdf()
+pdf()
+svg()
+dev.list()
+# Close the active device
+dev.off()
+dev.list()
+```
+You can close another device by specifying its device number. Since you are not closing the active device it remains active.
+
+```{r}
+pdf()
+pdf()
+svg()
+svg()
+pdf()
+pdf()
+dev.list()
+# Close device number 4
+dev.off(4)
+dev.list()
+```
+# High level graphical functions
+
+High level graphical functions are what you use to start a new graph and plot its main features. There are many such functions - here we just consider some of the most frequently used ones.
+
+# The plot function
+The plot function allows you to plot a wide variety of objects and pairs of objects. Here are some of the most useful.You can try other objects and pairs of objects yourself.
+
+# A single atomic vector
+For a numeric vector (integer, double) the values get plotted in order of position:
+
+```{r}
+plot(iris$Petal.Width)
+```
+Note that this includes factors, since factors are integer vectors under the hood. Although, R uses the levels of the factor to make the graph more informative:
+
+```{r}
+plot(iris$Species) # iris#Species is a factor
+```
+
+Other types of atomic vectors get coerced into numeric vectors, if possible.
+
+```{r}
+plot(c('1','2','3')) # Character vector coerced into numeric
+plot(iris$Petal.Width > 1) # Logical vector coerced into numeric
+```
+# A pair of atomic vectors
+If you specify a numeric vector for x and y then R will plot them as a scatter plot:
+
+```{r}
+plot(
+  x = iris$Petal.Width,
+  y = iris$Sepal.Width,
+)
+```
+If x is a factor then it will make a boxplot:
+
+```{r}
+plot(
+  x = iris$Species,
+  y = iris$Sepal.Width,
+)
+```
+# A list
+R looks for elements in the list with names "x" and "y", and plots them:
+
+```{r}
+lst <- list(x=1:10, y=2*(1:10), z=3:5)
+plot(lst)
+```
+# A data frame
+R makes a grid of scatter plots, one for each pair of columns in the data frame.
+
+```{r}
+plot(iris)
+```
+# A function
+R plots the function. You can specify a range of x values using from and to.
+
+```{r}
+plot(sin, from=0, to=2*pi)
+```
+# The boxplot function
+You can use the boxplot function to visualise the five number summary of a vector of numeric values: minimum value, lower quartile, mean value, upper quartile, maximum value.
+
+```{r}
+boxplot(iris$Sepal.Width)
+```
+# The hist function
+You can use the hist function to show a frequency histogram of the values in a numeric vector. You can specify the number of bins using breaks.
+
+```{r}
+hist(iris$Sepal.Width, breaks=20)
+```
+
+If you'd rather see relative frequencies then you can add freq=FALSE.
+
+```{r}
+hist(iris$Sepal.Width, breaks=20, freq=FALSE)
+```
+# The barplot function
+For numerical vectors.
+Can turn categorical into numerical using table.
+
+```{r}
+barplot(table(iris$Species))
+```
+Options:
+- width
+- beside
+
+A clustered bar chart is an effective tool for displaying the relationship between two categorical variables. R can construct a clustered bar chart from a table of frequencies. To construct a table of frequencies of the relationship between gender and study area for the survey data, and store it as the object tab:
+
+```{r}
+# survey <- read.csv('/course/data/survey.csv', header=TRUE)
+# tab <- table(survey$gender, survey$study.area)
+```
+Now to construct a clustered bar chart based on this table, including a legend:
+
+```{r}
+# survey <- read.csv('data/survey.csv', header=TRUE)
+# tab <- table(survey$gender, survey$study.area)
+# barplot(tab, beside=TRUE, legend=TRUE)
+```
+# The curve function
+You can plot named functions using the plot function, as shown above. There is more versatile function, the curve function, that allows you to also plot functions specified by an expression involving "x".
+
+An example in which the function is specified by name:
+
+```{r}
+curve(sin, from=0, to=2*pi)
+```
+An example in which the function is specified by an expression involving "x":
+
+```{r}
+curve(x^2 + 2*x -2, from=-3, to=3)
+```
+# The curve function
+You can plot named functions using the plot function, as shown above. There is more versatile function, the curve function, that allows you to also plot functions specified by an expression involving "x".
+
+An example in which the function is specified by name:
+
+
+```{r}
+curve(sin, from=0, to=2*pi)
+```
+
+
+```{r}
+curve(x^2 + 2*x -2, from=-3, to=3)
+```
+
+# Options and parameters
+## Options
+There are several options that you can add to most of the high level graphical functions. The main ones are these:
+- type. The type of graph to create - e.g. p (points), l (lines), b (points and lines).
+- main. A title for the graph.
+- sub. A subtitle for the graph.
+- xlab. A label for the x-axis.
+- ylab. A label for the y-axis.
+- xlim. The x-axis limits - a vector of length 2, e.g. c(0, 10).
+- ylim. The y-axis limits - a vector of length 2, e.g. c(0, 10).
+- axes. Whether to draw the axes - TRUE or FALSE (defaults to TRUE).
+Here's a graph with most of these options set:
+
+```{r}
+plot(
+  x = 1:10,
+  y = 10:1,
+  type = "b",
+  main = "A customised plot",
+  sub = "With a sub-heading",
+  xlab = "Ten random values",
+  ylab = "Ten more random values",
+  xlim = c(-2, 12),
+  ylim = c(-2, 12),
+)
+```
+# Parameters
+There are also many graphical parameters that you can specify, to control the way things appear. There are 73 of them. To see a complete list:
+
+```{r}
+?par
+```
+Here are some of the most useful ones:
+- adj. Text justification - 0 (left), 0.5 (centre), 1 (right).
+- bg. Background colour - e.g. "red", "#A4FF32", "rgb(255, 200, 150)".
+- cex. Magnification factor - e.g. 0.5, 2.
+- col. Colour - e.g. "red", "#A4FF32", "rgb(255, 200, 150)".
+- font. Font style - 1 (normal), 2 (bold), 3 (italics), 4 (bold italics)
+- lty. Line type - "blank", "solid", "dashed", "dotted", "dotdash", "longdash", "twodash".
+- lwd. Line width - e.g. 2, 3.
+- pch. Plotting character - e.g. "@", or a number 1-25.
+- ps. Size in points of texts and symbols - e.g. 14.
+
+Some of these parameters can also be targeted to the title, the subtitle, the axis, and the axis labels. So, in addition to cex, col, and font, there are also:
+- cex.main, cex.sub, cex.axis, cex.lab
+- col.main, col.sub, col.axis, col.lab
+- font.main, font.sub, font.axis, font.lab
+Here's an example of their use:
+
+```{r}
+plot(
+  x = 1:10,
+  y = 10:1,
+  main = "A demonstration",
+  cex.main = 3,
+  font.main = 2,
+  xlab = "The x-axis",
+  ylab = "The y-axis",
+  col.lab = "blue",
+  type = "b",
+  col = "red",
+  lty = "dashed",
+  lwd = 2,
+  pch = "&",
+)
+```
+
+# Using par
+You can often (but not always) set these parameters by providing them as arguments to the graphical functions (high and low level). When you do, they take effect just for that function call.
+
+Otherwise, you have to set them using the function par. When you use par they take effect for all ensuing graphs that you produce, until they are changed again.
+
+Here's the example above, using par:
+
+```{r}
+par(
+  cex.main = 3,
+  font.main = 2,
+  col.lab = "blue",
+  col = "red",
+  lty = "dashed",
+  lwd = 2,
+  pch = "&"
+)
+plot(
+  x = 1:10,
+  y = 10:1,
+  main = "A demonstration",
+  xlab = "The x-axis",
+  ylab = "The y-axis",
+  type = "b",
+)
+```
+Before changing graphical parameters using par, it is typically a good idea to save the old set of values so that you can restore them later.
+
+```{r}
+old_par <- par()
+# Make changes to parameters
+# Produce graphs
+par(old_par)
+```
+You can see what the graphical parameters are currently set to by calling par with no arguments:
+
+```{r}
+par()
+```
+# Plotting characters
+Here's a plot to show which symbols correspond to which numerical pch values:
+
+```{r}
+plot(
+  x = 1:25,
+  pch = 1:25
+)
+```
+# Specifying colours
+When you specify colours you can do so either by name, e.g. "red", or by hexadecimal code, e.g. "#FF0000", or by using "rgb(255, 0, 0)" .
+
+You can get a list of colour names using the colors function:
+
+```{r}
+colors()
+```
+You can also get a demonstration of the colours:
+
+```{r}
+demo(colors)
+```
+# Low level graphical functions
+Low level graphical functions are what you can use to add further features to the current plot, such as points, lines, and text. Again, there are many such functions - here we consider just some of the most commonly used ones.
+
+# The points function
+You can use the points function to add one or more points. Use the x argument to specify the x-values of the points; use the y argument to specify the y-values.
+
+```{r}
+plot(1:10)
+points(
+  x = c(2, 3),
+  y = c(9, 9),
+)
+```
+
+You can change the shape and colour of the points using the parameters pch and col:
+
+```{r}
+plot(1:10)
+points(
+  x = c(2, 3),
+  y = c(9, 9),
+  pch = 8, # 8 is a star
+  col = 'red',
+)
+```
+
+# The lines function
+You can use the lines function to add one or more lines according to the coordinates of their starting and ending points. The x argument specifies the x-values of the points to join; the y argument specifies the y-values.
+
+```{r}
+plot(1:10)
+lines(
+  c(2, 3, 4, 5),
+  c(9, 9, 8, 8),
+)
+```
+You can change the line type, the line width, and the line colour using lty, lwd, and col:
+
+```{r}
+plot(1:10)
+lines(
+  x = c(2, 3, 4, 5),
+  y = c(9, 9, 8, 8),
+  lty = 5, # 5 is longdash
+  lwd = 2,
+  col = 'blue',
+)
+```
+# The abline function
+You can use the abline function to add a line with a given gradient (a) and y-intercept (b):
+
+```{r}
+plot(1:10)
+# Add a line with gradient 4, y-intercept 0.5
+abline(
+  a = c(4, 6),
+  b = c(0.5, -1),
+)
+# Add a line with gradient 6, y-intercept -1
+abline(
+  a = 6,
+  b = -1,
+)
+```
+
+You can use lty, lwd, and col as for lines:
+
+```{r}
+plot(1:10)
+abline(
+  a = 6,
+  b = -0.5,
+  lty = 5,
+  lwd = 2,
+  col = 'blue',
+)
+```
+
+You can add the horizontal line with equation y = a by using h=a; you can add the vertical line with equation x = a by using v=a:
+
+```{r}
+curve(
+  x^2 + 2*x -2,
+  from = -3,
+  to = 3,
+  col = 'blue',
+  lwd = 2,
+)
+abline(
+  h = 0,
+  lty = 3,
+)
+abline(
+  v = 0,
+  lty = 3,
+)
+```
+# The text function
+You can use the text function to add items of text. Use the x argument to specify the x-values of the locations of the items; use the y argument to specify the y-values of the locations; use the labels argument  to specify the text.
+
+```{r}
+# Plot the sin curve
+plot(
+  sin,
+  from = 0,
+  to = 2*pi,
+)
+# Add points at the max and min
+points(
+  x = c(pi/2, 3*pi/2),
+  y = c(1, -1),
+)
+# Add text at the max and min
+text(
+  x = c(pi/2, 3*pi/2),
+  y = c(1, -1),
+  labels = c('Max', 'Min'),
+)
+```
+You can use the pos argument to specify where to place each item of text in relation to its point: 1 (below), 2 (left), 3 (above), 4 (right). When you do so, you can use the offset argument to specify how far to move the text, in fractions of a character width.
+
+You can use the font argument to specify the style of text: 1 (plain), 2 (bold), 3 (italic), 4 (bold italic). You can use the cex argument to specify a factor by which to expand or shrink the text. And you can use the col argument to specify the colour of the text.
+
+```{r}
+# Plot the sin curve
+plot(
+  sin,
+  from = 0,
+  to = 2*pi,
+)
+# Add points at the max and min
+points(
+  x = c(pi/2, 3*pi/2),
+  y = c(1, -1),
+)
+# Add text at the max and min
+text(
+  x = c(pi/2, 3*pi/2),
+  y = c(1, -1),
+  labels = c('Max', 'Min'),
+  pos = c(3, 4),
+  offset = c(0.5, 0.5),
+  font = c(2, 3),
+  cex = c(1.5, 1.5),
+  col = c('green', 'red'),
+)
+```
+
+# (Multi-plotting)
+## Adding to the current plot
+As you have seen, when you call a low level graphical function it adds the result to the current plot, but when you call a high level graphical function it starts a new plot. What if you want it added to the current plot instead? You can get that, by adding the argument add=TRUE.
+
+Default behaviour - new plot created:
+
+```{r}
+plot(sin, from=0, to=2*pi)
+plot(cos, from=0, to=2*pi)
+```
+
+Default overridden - added to the current plot:
+
+```{r}
+plot(sin, from=0, to=2*pi)
+plot(cos, from=0, to=2*pi, add=TRUE)
+```
+
+# Multiple axes
+What if you want multiple plots together, but on separate axes? You can get that, by using par and setting the parameter ```mfrow``` or ```mfcol```.
+
+Suppose you want to plot the sin and cos functions, laid out horizontally on a 2 x 2 grid. First, you use the ```par``` function and set ```mfrow=c(2, 2)```. Then you do your plotting as normal.
+
+```{r}
+par(mfrow = c(2, 2))
+plot(sin, from=0, to=2*pi)
+plot(cos, from=0, to=2*pi)
+```
+
+What if you want to lay them out vertically instead? Then you'd use ```mfcol```:
+
+```{r}
+par(mfcol = c(2, 2))
+plot(sin, from=0, to=2*pi)
+plot(cos, from=0, to=2*pi)
+```
+
+Keep in mind that because you've used par the setting will stay in effect until you change it (e.g. set it back to the default of c(1, 1)).
