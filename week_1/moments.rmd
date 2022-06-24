@@ -1,13 +1,37 @@
 
-
-
 ```{r}
-
+# install.packages("moments")
+library(moments)
 ```
+Apple is planning to host a live webcast of the next WWDC conference.
+The server has a maximum capacity of 3 million people who can watch the
+live webcast. Let random variable X denote the number of people
+(measured in millions) that want to watch the live webcast, with pdf
 
-
+$f(x) = x^2/9$ for 0 < x < 3
 ```{r}
-
+f <- function(x) (x^2)/9
+f
 ```
-
+check that it integrates to 1
+```{r}
+area <- integrate(pdf, 0, 3)
+area
+```
+the expected value is:
+```{r}
+f2 <- function(x) x * f(x)
+e <- integrate(f2, 0, 3)
+e
+```
+the something is ...
+```{r}
+f3  <- function(x) x^2 *f(x)
+e2 <- integrate(f3, 0, 3)
+e2
+```
+the variance is
+```{r}
+5.4 - 2.25^2
+```
 

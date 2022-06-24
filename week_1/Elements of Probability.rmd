@@ -309,10 +309,10 @@ curve(exp(-x), add = TRUE, col = "purple", lwd=2)
 R provides built in random number generators for well known distributions. For example, if you wish to generate observations from the Gamma(a,b) distribution, you can do the following:
 
 ```{r}
-n = 10000
-alpha = 0.8
-beta = 5
-sim.dat = rgamma(n, alpha, beta)
+n <- 10000
+alpha <- 0.8
+beta <- 5
+sim.dat <- rgamma(n, alpha, beta)
 hist(sim.dat, prob = TRUE, breaks = 100)
 curve(dgamma(x,alpha,beta),add=TRUE,col="orange", lwd = 2)
 ```
@@ -337,7 +337,7 @@ $f(x) = \dfrac{x^2}{9}$ for $0 < x < 3$
 this one is problematic
 ```{r}
 pdf <- function(x) (x^2)/9
-mean(pdf)
+pdf
 ```
 
 ## q

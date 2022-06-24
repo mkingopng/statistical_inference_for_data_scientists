@@ -1,5 +1,5 @@
 ---
-title: "R Notebook"
+title: "Multivariate Distributions"
 output: html_notebook
 ---
 
@@ -11,17 +11,53 @@ output: html_notebook
 
 ## q1
 a pdf is defined by:
+$$f(x,y) = \begin{cases}
+c(x+2y) & \text{ if } 0 < y < 1 \text{ and } 0 < x < 2 \\
+0 & \text{ otherwise}$$
 
 Find the value of C
 
+define the function
+```{r}
+df <- function(x)
+df
+```
+
+the density function must integrate to 1 over the range of x and y
+```{r}
+llimy <- 0; llimx <- 0
+ulimy <- 1; ulimx <- 2
+
+f <- function(x,y) (x+2*y)
+
+integrate(function(y) {
+    sapply(y, function(y) {
+      integrate(function(x) f(x,y), llimx, ulimx)$value
+    })
+  }, llimy, ulimy)
+```
+therefore 4c = 1
+hence c = 0.25
+
 
 ```{r}
+c <- 1/4
+c
 ```
+
 ## q2
 find the joint cdf of X and Y
-
 ```{r}
+llimy <- 0; llimx <- 0
+ulimy <- 1; ulimx <- 2
 
+f <- function(x,y) (x+2*y)
+
+integrate(function(y) {
+    sapply(y, function(y) {
+      integrate(function(x) f(x,y), llimx, ulimx)$value
+    })
+  }, llimy, ulimy)
 ```
 ## q3
 compute the probability #P(X \leq 1, Y \leq 0.25) to 2 decimal places
