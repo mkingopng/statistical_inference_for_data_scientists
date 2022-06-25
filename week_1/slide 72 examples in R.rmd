@@ -1,0 +1,17 @@
+---
+title: "slide 72 examples"
+output: html_notebook
+---
+
+
+```{r}
+f <- expression(30*x^2 * (1-x)^2)
+f
+```
+
+
+```{r}
+integrate(f, 0, 1)
+```
+
+
