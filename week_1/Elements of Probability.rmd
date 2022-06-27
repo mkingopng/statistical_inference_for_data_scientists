@@ -24,6 +24,15 @@ find the probability that after 11 throws my score is three points higher than y
 dbinom(x=7, size=11, prob=0.5)
 ```
 
+whats the most likely score in a 50 question multi choice exam, with 5 choices per question?
+
+10 is the most likely outcome with a probability of 13.9%
+```{r}
+dbinom(x=2, size=25, prob=0.2)
+```
+```{r}
+0.003777893+0.02361183+0.0708355
+```
 - use the ```choose(n,k)``` function to calculate the binomial coefficient
 - ref tutorial 1 @ 15:16
 ```{r}
