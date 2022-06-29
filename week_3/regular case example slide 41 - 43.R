@@ -1,3 +1,5 @@
+## this matches the example on slide 41 - 43
+
 library(ggplot2)
 theta <- 2.3           # Choose a value for theta to be estimated
 y <- runif(10000,0,1)
